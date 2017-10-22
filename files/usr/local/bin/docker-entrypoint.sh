@@ -23,7 +23,7 @@ fi
 echo ${SSL_CHAIN_FILE}
 
 triesRemaining=10;
-while [ ! -f ${SSL_CRT_FILE} ] || [ ! -f ${SSL_KEY_FILE} ] || [ ! -f ${SSL_CHAIN_FILE} ]
+while [ ! -e ${SSL_CRT_FILE} ] || [ ! -e ${SSL_KEY_FILE} ] || [ ! -e ${SSL_CHAIN_FILE} ]
 do
   triesRemaining="$((triesRemaining-1))";
   if [ "$triesRemaining" -lt 0 ];
