@@ -1,20 +1,26 @@
 #!/bin/sh
 set -eu
 
-if [ "${SSL_CRT_FILE:-NOTSET}" = "NOTSET" ];
+echo ${SSL_CRT_FILE:=NOTSET}
+if [ "${SSL_CRT_FILE}" = "NOTSET" ];
 then
   export SSL_CRT_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/fullchain.pem"
 fi
+echo ${SSL_CRT_FILE}
 
-if [ "${SSL_KEY_FILE:-NOTSET}" = "NOTSET" ];
+echo ${SSL_KEY_FILE:=NOTSET}
+if [ "${SSL_KEY_FILE}" = "NOTSET" ];
 then
   export SSL_KEY_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/privatekey.pem"
 fi
+echo ${SSL_KEY_FILE}
 
-if [ "${SSL_CHAIN_FILE:-NOTSET}" = "NOTSET" ];
+echo ${SSL_CHAIN_FILE:=NOTSET}
+if [ "${SSL_CHAIN_FILE}" = "NOTSET" ];
 then
   export SSL_CHAIN_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/chain.pem"
 fi
+echo ${SSL_CHAIN_FILE}
 
 triesRemaining=10;
 while [ ! -f ${SSL_CRT_FILE} ] || [ ! -f ${SSL_KEY_FILE} ] || [ ! -f ${SSL_CHAIN_FILE} ]
