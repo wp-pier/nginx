@@ -3,7 +3,7 @@ FROM wppier/confd:latest as confd
 FROM nginx:mainline-alpine
 
 LABEL name="wppier/nginx"
-LABEL version="0.0.1"
+LABEL version="0.0.2"
 
 COPY --from=confd /usr/local/bin/confd /usr/local/bin/confd
 

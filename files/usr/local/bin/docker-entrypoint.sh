@@ -1,17 +1,17 @@
 #!/bin/sh
 set -eu
 
-if [ -z ${SSL_CRT_FILE:-} ];
+if [ "${SSL_CRT_FILE:-NOTSET}" = "NOTSET" ];
 then
   export SSL_CRT_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/fullchain.pem"
 fi
 
-if [ -z ${SSL_KEY_FILE:-} ];
+if [ "${SSL_KEY_FILE:-NOTSET}" = "NOTSET" ];
 then
   export SSL_KEY_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/privatekey.pem"
 fi
 
-if [ -z ${SSL_CHAIN_FILE:-} ];
+if [ "${SSL_CHAIN_FILE:-NOTSET}" = "NOTSET" ];
 then
   export SSL_CHAIN_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/chain.pem"
 fi
