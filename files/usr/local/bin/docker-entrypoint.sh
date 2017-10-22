@@ -11,7 +11,7 @@ echo ${SSL_CRT_FILE}
 echo ${SSL_KEY_FILE:=NOTSET}
 if [ "${SSL_KEY_FILE}" = "NOTSET" ];
 then
-  export SSL_KEY_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/privatekey.pem"
+  export SSL_KEY_FILE="/etc/letsencrypt/live/${SERVER_NAME:-localhost}/privkey.pem"
 fi
 echo ${SSL_KEY_FILE}
 
@@ -23,7 +23,7 @@ fi
 echo ${SSL_CHAIN_FILE}
 
 triesRemaining=10;
-while [ ! -e ${SSL_CRT_FILE} ] || [ ! -e ${SSL_KEY_FILE} ] || [ ! -e ${SSL_CHAIN_FILE} ]
+while [ ! -f ${SSL_CRT_FILE} ] || [ ! -f ${SSL_KEY_FILE} ] || [ ! -f ${SSL_CHAIN_FILE} ]
 do
   triesRemaining="$((triesRemaining-1))";
   if [ "$triesRemaining" -lt 0 ];
