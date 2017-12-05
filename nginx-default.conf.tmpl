@@ -1,5 +1,5 @@
 upstream php_wordpress {
-  server wordpress:9000;
+  server {{WORDPRESS_UPSTREAM}}{{^WORDPRESS_UPSTREAM}}wp-fpm{{/WORDPRESS_UPSTREAM}}:9000;
 }
 
 ########
@@ -9,7 +9,7 @@ server {
   server_name  "";
 
   location / {
-    return 301 https://{{getenv "SERVER_NAME" "$host"}}$request_uri;
+    return 301 https://{{SERVER_NAME}}{{^SERVER_NAME}}$host{{/SERVER_NAME}}$request_uri;
   }
 }
 
@@ -17,11 +17,11 @@ server {
 ## The main Server
 server {
   listen 443 ssl http2;
-  server_name {{getenv "SERVER_NAME" "localhost"}};
+  server_name {{SERVER_NAME}}{{^SERVER_NAME}}localhost{{/SERVER_NAME}};
 
   ### BEGIN SSL ###
-  ssl_certificate           {{getenv "SSL_CRT_FILE"}};
-  ssl_certificate_key       {{getenv "SSL_KEY_FILE"}};
+  ssl_certificate           {{SSL_CRT_FILE}};
+  ssl_certificate_key       {{SSL_KEY_FILE}};
   ssl_session_timeout 1d;
   ssl_session_cache shared:SSL:50m;
   ssl_session_tickets off;
@@ -33,14 +33,21 @@ server {
   ssl_ecdh_curve            secp384r1;
   ssl_stapling              on;
   ssl_stapling_verify       on;
-  ssl_trusted_certificate   {{getenv "SSL_CHAIN_FILE"}};
-  resolver                  {{getenv "RESOLVERS"}} valid=300s;
+  ssl_trusted_certificate   {{SSL_CHAIN_FILE}};
+  resolver                  {{RESOLVERS}} valid=300s;
   resolver_timeout          5s;
 
   add_header                Strict-Transport-Security "max-age=15768000;";
   ### END SSL ###
 
-  root /var/www/html;
+  # Conditional change docroot if the wordpress theme
+  # has supplied files that should be loaded from root.
+  # For example: robots.txt
+  set $root  /var/www/html/public;
+  if (-e /var/www/html/theme$uri) {
+    set $root  /var/www/html/theme;
+  }
+  root $root;
 
   keepalive_timeout 60;
 

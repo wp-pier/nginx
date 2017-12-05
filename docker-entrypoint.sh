@@ -29,7 +29,7 @@ do
   if [ "$triesRemaining" -lt 0 ];
   then
     echo "You need certs to run! Quiting...";
-    exit 1 ;
+    exit 1;
   fi
   echo "Certs don't exist yet. Waiting (${triesRemaining})...";
   sleep 3;
@@ -45,6 +45,8 @@ fi
 generate-dhparam.sh ${DHPARAM_BITS:-4096} ${DHPARAM_USEDSA:-true}
 
 
-confd -onetime -backend env
+cat /etc/nginx/templates/nginx-default.conf.tmpl | mo > /etc/nginx/conf.d/default.conf
+chmod 0644 /etc/nginx/conf.d/default.conf
+chown nginx /etc/nginx/conf.d/default.conf
 
 exec "$@"
